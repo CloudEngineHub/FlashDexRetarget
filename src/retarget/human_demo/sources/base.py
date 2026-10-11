@@ -52,8 +52,8 @@ class Source:
 
     mano: dict = {}
 
-    def __init__(self, raw: Path, cfg, mano_dir: str | None = None) -> None:
-        self.raw, self.cfg, self.mano_dir = Path(raw), cfg, mano_dir
+    def __init__(self, raw: Path, cfg, mano_dir: str | None = None, tip_vertex=None) -> None:
+        self.raw, self.cfg, self.mano_dir, self.tip_vertex = Path(raw), cfg, mano_dir, tip_vertex
         self._meshes: dict[str, trimesh.Trimesh] = {}
         self._trees: dict[tuple[str, float], tuple] = {}
 
@@ -201,7 +201,7 @@ def _write(source: Source, demo: Demo, cfg, out_dir: Path, shared: dict) -> dict
         joints[..., 2] -= z0
         verts[..., 2] -= z0
         rot = R @ Rotation.from_rotvec(hand.global_orient).as_matrix()
-        wrist_pos, wrist_rot, mano_joints = C.mano_reference(joints, verts, rot, side)
+        wrist_pos, wrist_rot, mano_joints = C.mano_reference(joints, verts, rot, side, cfg.mano_tip_vertex[side])
         clip[f"mano_{side}_wrist_pos"] = _resample(wrist_pos, demo.fps, cfg.fps).astype(np.float32)
         clip[f"mano_{side}_wrist_rot"] = _resample(wrist_rot.astype(np.float64), demo.fps, cfg.fps, rot=True).astype(np.float32)
         clip[f"mano_{side}_joints"] = _resample(mano_joints, demo.fps, cfg.fps).astype(np.float32)
@@ -241,7 +241,7 @@ def import_demos(cfg, mano_dir: Path, workers: int) -> None:
             raise FileNotFoundError(f"{mano_dir / f} missing (MANO models: mano.is.tue.mpg.de)")
     cfg.mano_dir = str(mano_dir)
     module = importlib.import_module(f"retarget.human_demo.sources.{cfg.source.name}")
-    source = module.Source(Path(cfg.raw), cfg.source, str(mano_dir))
+    source = module.Source(Path(cfg.raw), cfg.source, str(mano_dir), cfg.mano_tip_vertex)
     dataset = Path(cfg.dataset)
     out_dir = dataset / "human_demo"
     out_dir.mkdir(parents=True, exist_ok=True)

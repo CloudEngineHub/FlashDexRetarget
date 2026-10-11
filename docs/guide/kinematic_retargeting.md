@@ -59,9 +59,9 @@ object poses, then `base.py` handles every source the same way.
 | `hot3d` | `dataset/<recording>/`, `_assets/` | recordings are cut into segments where both hands hold one object (`source.segment`) |
 
 Per clip: MANO forward pass with `assets/mano/MANO_{RIGHT,LEFT}.pkl`, rotation into a z-up world, table height
-(`source.table_z` for HOT3D), the wrist and fingertip reference the rewards compare against, and resampling to
-`fps` (60 Hz). A clip is skipped when a hand has no object or an object flips more than `max_obj_rot_step_deg`
-in one frame.
+(`source.table_z` for HOT3D), the wrist and fingertip reference the rewards compare against (the MANO vertices in
+`mano_tip_vertex`), and resampling to `fps` (60 Hz). A clip is skipped when a hand has no object or an object
+flips more than `max_obj_rot_step_deg` in one frame.
 
 ### Clip format (`human_demo/<clip>.npz`)
 

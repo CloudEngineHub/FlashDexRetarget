@@ -51,7 +51,7 @@ retarget:
   guess_steps: 30
   guess_jitter: 0.002
   start_settle: 60
-  approach: {enable: true, backoff: 0.06, slide_frames: 30, close_frames: 30, preshape: 1.0}   # attempt 0
+  approach: {enable: false, backoff: 0.06, slide_frames: 30, close_frames: 30, preshape: 1.0}   # attempt 0
   settle_steps: 80
   recover_tip_err: 0.045
   recover_window: 15

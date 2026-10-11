@@ -11,6 +11,9 @@ sides: both      # both | right | left
 workers: null    # null: half the CPU cores
 fps: 60
 max_obj_rot_step_deg: 60
+mano_tip_vertex:   # MANO fingertip vertices (CHORD / manotorch finger ends)
+  right: {thumb: 745, index: 317, middle: 444, ring: 556, pinky: 673}
+  left:  {thumb: 745, index: 317, middle: 445, ring: 556, pinky: 673}
 
 hydra:
   run:

@@ -8,7 +8,6 @@ import numpy as np
 import trimesh
 from scipy.spatial.transform import Rotation
 
-from retarget.human_demo import clips as C
 from retarget.human_demo.sources.base import Demo, Hand, Source as Base, _forward, _mano
 
 
@@ -73,7 +72,7 @@ class Source(Base):
             model = _mano(self.mano_dir, side, tuple(sorted(self.mano.items())))
             _, verts = _forward(model, hand)
             link_of = model.lbs_weights.numpy().argmax(1)  # (778,) the MANO link each vertex follows
-            tips = verts[:, list(C.TIP_VERTEX.values())]
+            tips = verts[:, list(self.tip_vertex[side].values())]
             tip_dist = np.full(tips.shape[:2], np.inf)
             link_body = np.zeros((len(verts), 16), dtype=int)
             link_dist = np.full((len(verts), 16), np.inf)

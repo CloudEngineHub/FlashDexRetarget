@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+from collections.abc import Mapping
 from pathlib import Path
 
 import numpy as np
@@ -12,19 +13,19 @@ MANO_JOINT_NAMES = tuple(
     sorted(f"{f}_{p}" for f in FINGERS for p in ("proximal", "intermediate", "distal", "tip"))
 )
 SIDES = ("right", "left")
-TIP_VERTEX = {"thumb": 766, "index": 353, "middle": 467, "ring": 576, "pinky": 695}  # MANO fingertip vertices
 
 
-def mano_reference(joints: np.ndarray, verts: np.ndarray, global_rot: np.ndarray,
-                   side: str) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
-    """MANO layer output (joints (T, 16, 3), verts (T, 778, 3), global_rot (T, 3, 3)) -> clip hand arrays."""
+def mano_reference(joints: np.ndarray, verts: np.ndarray, global_rot: np.ndarray, side: str,
+                   tip_vertex: Mapping[str, int]) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """MANO layer output (joints (T, 16, 3), verts (T, 778, 3), global_rot (T, 3, 3)) -> clip hand arrays;
+    tip_vertex = fingertip vertex per finger (cfg.mano_tip_vertex[side])."""
     first_joint = {"index": 1, "middle": 4, "pinky": 7, "ring": 10, "thumb": 13}
     wrist = joints[:, 0]
     named = {}
     for finger, j in first_joint.items():
         for k, part in enumerate(("proximal", "intermediate", "distal")):
             named[f"{finger}_{part}"] = joints[:, j + k]
-        named[f"{finger}_tip"] = verts[:, TIP_VERTEX[finger]]
+        named[f"{finger}_tip"] = verts[:, tip_vertex[finger]]
     joints20 = np.stack([named[n] for n in MANO_JOINT_NAMES], axis=1)
     rebase = np.array([[-1, 0, 0], [0, 0, 1], [0, 1, 0]], dtype=np.float64)
     if side == "left":

@@ -18,8 +18,8 @@ class Source(Base):
 
     mano = {"use_pca": False, "flat_hand_mean": True}
 
-    def __init__(self, raw, cfg, mano_dir: str | None = None) -> None:
-        super().__init__(raw, cfg, mano_dir)
+    def __init__(self, raw, cfg, mano_dir: str | None = None, tip_vertex=None) -> None:
+        super().__init__(raw, cfg, mano_dir, tip_vertex)
         self.scales = {str(k): float(v) for k, v in (cfg.get("scales") or {}).items()}
 
     def units(self) -> list[str]:

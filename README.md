@@ -94,6 +94,14 @@ ROBOTS="xhand sharpa" bash scripts/retarget/taco.sh <raw_dataset_path> <output_d
 It writes `<output_dataset_path>/<robot>/motion.pt`; every step and its settings are in
 [`docs/guide/kinematic_retargeting.md`](docs/guide/kinematic_retargeting.md).
 
+### 50-motion benchmark
+
+A fixed set of 50 clips (TACO 10, OakInk2 15, HOT3D 25), built from the three releases in one go:
+
+```sh
+bash scripts/retarget/50_motion_benchmark.sh <taco_raw> <oakink2_raw> <hot3d_raw> <output_dataset_path>
+```
+
 ## Training
 
 ```sh

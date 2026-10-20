@@ -54,7 +54,7 @@ object poses, then `base.py` handles every source the same way.
 
 | source | raw layout | which object each hand holds |
 |---|---|---|
-| `taco` | `Hand_Poses/`, `Object_Poses/`, `object_models/` | tool and target go to the nearer hand |
+| `taco` | `Hand_Poses/`, `Object_Poses/`, `object_models_released/` | tool and target go to the nearer hand |
 | `oakink2` | `anno_preview/`, `program/`, `object_repair/` | the object the hand touches most; stages where one hand has several objects are skipped |
 | `hot3d` | `dataset/<recording>/`, `_assets/` | recordings are cut into segments where both hands hold one object (`source.segment`) |
 
